@@ -2,7 +2,22 @@ import React from 'react'
 
 const Loginpage = () => {
   return (
-    <div>Loginpage</div>
+
+    <div>
+      <h2 className='display-5 my-5'>Login</h2>
+      <form>
+        <div class="mb-3">
+          <label htmlFor="username" className="form-label">Enter Your username</label>
+          <input type="text" className="form-control" />
+        </div>
+        <div class="mb-3">
+          <label htmlFor="email" className="form-label">Enter Your email</label>
+          <input type="email" className="form-control" />
+        </div>
+        <button type="submit" className="btn btn-outline-dark">Submit</button>
+      </form>
+    </div>
+
   )
 }
 
