@@ -1,19 +1,47 @@
 const express = require('express');
-var cors = require('cors')
+const mongoose = require('mongoose');
+var cors = require('cors');
+const User = require('./models/User');
+const bcrypt = require('bcrypt');
+
+const salt = bcrypt.genSaltSync(10);
+
 
 const app = express();
 const port = 8000;
 
+
 app.use(cors());
 app.use(express.json());
+
+mongoose.connect("mongodb+srv://javid:12345@my-blog.htrbeyt.mongodb.net/blog")
+.then(() => {
+    console.log("DB Connected");
+})
+
 
 app.get('/test', (req, res) => {
     res.json('Hello World!');
 })
 
-app.post("/register", (req, res) =>{
+app.post("/register", async (req, res) =>{
     const {userName, password} = req.body;
-    res.json({userName, password});
+
+    try{
+        const userDoc = await User.create({
+            userName,
+            password:bcrypt.hashSync(password, salt)
+        })
+    
+        res.json(userDoc);
+    } catch (e) {
+        if (e.code === 11000) {
+            // Duplicate key error (MongoDB error code)
+            res.status(400).json({ error: "Username already exists" });
+        } else {
+            res.status(400).json(e);
+        }
+    }
 })
 
 
